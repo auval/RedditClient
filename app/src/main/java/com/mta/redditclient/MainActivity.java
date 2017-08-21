@@ -21,9 +21,9 @@ public class MainActivity extends AppCompatActivity implements IListView {
     private static final String TAG = MainActivity.class.getSimpleName();
     ActivityMainBinding binding;
 
-    // This activity is not tested, and the mModel can be mocked for testing purpose
-    IModel mModel = new RetrofitClient();
-    MyAdapter mAdapter = new MyAdapter();
+    // the mModel can be mocked for testing purpose
+    static IModel mModel = new RetrofitClient();
+    MyAdapter mAdapter = new MyAdapter(mModel);
     IListPresenter mPresenter = new ListPresenter(this, mModel, mAdapter);
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements IListView {
         binding.navigation.getMenu().getItem(0).setTitle(REDDIT_CHANNEL);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         binding.recyclerView.setAdapter(mAdapter);
     }
 
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements IListView {
 
     @Override
     public void invalidateList(IModel model) {
-        binding.recyclerView.invalidate();
+        binding.recyclerView.getAdapter().notifyDataSetChanged();
+                //invalidate();
     }
 }

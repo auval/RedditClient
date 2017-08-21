@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="child"
+            type="com.mta.model.pojo.Child" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="4dp">
+
+        <ImageView
+            android:id="@+id/fav_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            app:srcCompat="@android:drawable/btn_star_big_off" />
+
+        <!-- binding w/ picasso inspired by: -->
+        <!-- https://android.jlelse.eu/loading-images-with-data-binding-and-picasso-555dad683fdc -->
+        <!-- implemented in AsyncImage.java -->
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="@dimen/post_image_size"
+            android:layout_height="@dimen/post_image_size"
+            android:layout_weight="0"
+            android:padding="@dimen/post_image_padding"
+            app:srcCompat="@{child.getData().getThumbnail()}" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="@dimen/post_image_padding"
+            android:text="@{child.getData().getTitle()}" />
+    </LinearLayout>
+
+</layout>

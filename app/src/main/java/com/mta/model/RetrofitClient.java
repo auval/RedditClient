@@ -88,7 +88,7 @@ public class RetrofitClient implements IModel {
 
     @Override
     public List<Child> getPosts() {
-        return null;
+        return mPostsList;
     }
 
 }
