@@ -1,10 +1,10 @@
 
-package com.mta;
+package com.mta.model.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Source {
+public class Resolution {
 
     @SerializedName("url")
     @Expose

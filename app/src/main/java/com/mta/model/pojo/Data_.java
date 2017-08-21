@@ -1,5 +1,5 @@
 
-package com.mta;
+package com.mta.model.pojo;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
