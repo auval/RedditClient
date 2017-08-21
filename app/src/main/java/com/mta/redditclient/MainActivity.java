@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -22,7 +23,8 @@ public class MainActivity extends AppCompatActivity implements IListView {
 
     // This activity is not tested, and the mModel can be mocked for testing purpose
     IModel mModel = new RetrofitClient();
-    IListPresenter mPresenter = new ListPresenter(this, mModel);
+    MyAdapter mAdapter = new MyAdapter();
+    IListPresenter mPresenter = new ListPresenter(this, mModel, mAdapter);
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements IListView {
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements IListView {
         // requirement 1A
         binding.navigation.getMenu().getItem(0).setTitle(REDDIT_CHANNEL);
 
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(mAdapter);
     }
 
     /**
@@ -69,5 +72,10 @@ public class MainActivity extends AppCompatActivity implements IListView {
     @Override
     public void showErrorMessage(int res) {
         Toast.makeText(this, res, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void invalidateList(IModel model) {
+        binding.recyclerView.invalidate();
     }
 }

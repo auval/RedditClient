@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * I created the initial pojo's using http://www.jsonschema2pojo.org/
+ * (all classes inside /pojo are auto generated)
  *
  * api ref: https://github.com/reddit/reddit/wiki/JSON
  *
