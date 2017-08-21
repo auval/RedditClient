@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     defaultConfig {
-        applicationId "com.mta.reditclient"
+        applicationId "com.mta.redditclient"
         minSdkVersion 24
         targetSdkVersion 26
         versionCode 1
@@ -16,6 +16,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    dataBinding {
+        enabled = true
     }
 }
 
@@ -35,5 +39,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 
+
+    testCompile "org.mockito:mockito-core:2.8.9"
 
 }

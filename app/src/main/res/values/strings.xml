@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">ReditClient</string>
+    <string name="app_name">RedditClient</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_favirotes">My Favorites</string>
+    <string name="failed_fetch">Error: Failed to fetch data from Reddit</string>
 </resources>

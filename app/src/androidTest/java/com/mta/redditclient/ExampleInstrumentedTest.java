@@ -1,4 +1,4 @@
-package com.mta.reditclient;
+package com.mta.redditclient;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.mta.reditclient", appContext.getPackageName());
+        assertEquals("com.mta.redditclient", appContext.getPackageName());
     }
 }
