@@ -1,17 +1,10 @@
 package com.mta.redditclient;
 
-import android.os.Bundle;
-import android.util.Log;
-
 import com.mta.model.IModel;
-import com.mta.model.fav.ChildFavTypeConverter;
-import com.mta.model.fav.MyDb;
+import com.mta.model.fav.TypeConverters;
 import com.mta.model.pojo.Child;
-import com.mta.util.Functify;
 
 import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by amir on 8/21/17.
@@ -19,103 +12,77 @@ import static android.content.ContentValues.TAG;
 
 class ListPresenter implements IListPresenter {
 
-    boolean loadingCache = false;
-    private IListView view; // has ref to context
-    private IModel model;
+    private static final int TAB_LIVE = 0;
+    private static final int TAB_FAV = 1;
+    private IListView mView; // has ref to context
+    private IModel mModel;
     private IListAdapter mAdapter; // has ref to context
+    private int currentTab = TAB_LIVE;
 
     public ListPresenter(IListView view, IModel model, IListAdapter adapter) {
-        this.view = view;
-        this.model = model;
+        this.mView = view;
+        this.mModel = model;
         mAdapter = adapter;
     }
 
     @Override
     public void onDataChanged() {
 
-        List<Child> posts = model.getPosts();
+        if (currentTab == TAB_LIVE) {
+            List<Child> posts = mModel.getPosts();
 
-        mAdapter.setData(posts);
+            mAdapter.setData(posts);
 
-        view.invalidateList(model);
+            mView.invalidateList(mModel);
+        } else {
+            List<Child> posts = mModel.getFavorites();
+            mAdapter.setData(posts);
+
+            mView.invalidateList(mModel);
+        }
     }
 
     @Override
     public void onFetchFailure() {
-        view.showErrorMessage(R.string.failed_fetch);
+        mView.showErrorMessage(R.string.failed_fetch);
     }
 
     @Override
     public void openUrl(Child c) {
-        view.openWebView(c.getData().getUrl(), c.getData().getId());
+        mView.openWebView(c);
     }
 
     @Override
-    public void setFavorite(Child c, boolean fav) {
+    public void setFavorite(Child c, boolean isFav) {
 
-        MyDb instance = model.getFavDb();
-        if (fav) {
-            instance.saveFavorite(c);
+        if (isFav) {
+            mModel.saveFavorite(c);
         } else {
             // delete a favorite
-            instance.deleteFavorite(c);
+            mModel.deleteFavorite(c);
         }
     }
 
     @Override
     public boolean isFavorite(Child child) {
-        final MyDb instance = model.getFavDb();
-
-        if (instance.isCacheLoaded()) {
-            return instance.isFavofite(ChildFavTypeConverter.getId(child));
-
-        } else {
-
-            loadCache(instance);
-
-            // for now return false, wait until the fav list is ready, and a callback will be sent
-            return false;
-        }
+        return mModel.isFavofite(TypeConverters.getId(child), this);
     }
 
-    /**
-     * here I'm using a utility class I've written in the past.
-     * It's allowing to setup a series of operations to be performed one after the other,
-     * each on its designated thread, user or main.
-     * <p>
-     * (and released open source https://github.com/auval/Functify)
-     *
-     * @param instance
-     */
-    private void loadCache(final MyDb instance) {
-        if (loadingCache) {
-            // allow to load the cache only once,
-            return;
-        }
-        loadingCache = true;
+    @Override
+    public void showLiveChannel() {
+        currentTab = TAB_LIVE;
+        onDataChanged();
+    }
 
-        Log.i(TAG, "loading cache...");
-        Functify.FuncFlow fb = Functify.newFlow();
-        fb.setExceptionHandler(new Functify.FExceptionHandler() {
-            @Override
-            public void onFException(Throwable e) {
-                e.printStackTrace();
-            }
-        });
-        fb.runAsync(new Functify.Func() {
-            @Override
-            public void onExecute(Bundle b) {
-                instance.loadCache();
-            }
-        }).runOnMain(new Functify.Func() {
-            @Override
-            public void onExecute(Bundle b) {
-                Log.i(TAG, "cache is loaded");
-                onDataChanged();
+    @Override
+    public void showFavorites() {
+        currentTab = TAB_FAV;
+        onDataChanged();
+    }
 
-            }
-        }).execute();
-
+    @Override
+    public boolean isInLiveTab() {
+        return currentTab == TAB_LIVE;
     }
 
 

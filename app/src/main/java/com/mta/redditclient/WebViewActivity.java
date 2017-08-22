@@ -11,14 +11,21 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.mta.model.IModel;
+import com.mta.model.RedditModel;
+import com.mta.model.pojo.Child;
 import com.mta.redditclient.databinding.WebViewBinding;
 
 /**
  * Created by amir on 8/21/17.
  */
-public class WebViewActivity extends Activity {
+public class WebViewActivity extends Activity implements View.OnClickListener {
 
     WebViewBinding binding;
+    IModel mModel;
+    //    IListPresenter mPresenter;
+    String id;
+    boolean favofite;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,6 +35,8 @@ public class WebViewActivity extends Activity {
         binding.contentLoadingProgressBar.show();
 
         String url = getIntent().getStringExtra("url");
+        id = getIntent().getStringExtra("id");
+
 
         binding.webView.getSettings().setJavaScriptEnabled(true);
         binding.webView.loadUrl(url);
@@ -56,6 +65,52 @@ public class WebViewActivity extends Activity {
 
         });
 
+        binding.homeButton.setOnClickListener(this);
+        binding.starButton.setOnClickListener(this);
 
+        initModel();
+
+    }
+
+    private void initModel() {
+        mModel = new RedditModel(this);
+        favofite = mModel.isFavofite(id, null);
+
+        setupFavButton();
+    }
+
+    private void setupFavButton() {
+        // todo: can move this logic to an observable data class that uses both Child and Favorite
+        if (favofite) {
+            binding.starButton.setImageResource(R.drawable.ic_star_24dp);
+        } else {
+            binding.starButton.setImageResource(R.drawable.ic_star_border_24dp);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if (view == binding.homeButton) {
+            finish();
+        } else if (view == binding.starButton) {
+            // toggle
+            favofite = !favofite;
+            Child c = mModel.getChild(id);
+
+            if (c==null) {
+                // error occurred.
+                // (production app should report this for fixing)
+                binding.starButton.setVisibility(View.GONE);
+                return;
+            }
+
+            if (favofite) {
+                mModel.saveFavorite(c);
+            } else {
+                mModel.deleteFavorite(c);
+            }
+            setupFavButton();
+        }
     }
 }

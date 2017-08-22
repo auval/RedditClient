@@ -1,6 +1,6 @@
 package com.mta.redditclient;
 
-import com.mta.model.fav.ChildFavTypeConverter;
+import com.mta.model.fav.TypeConverters;
 import com.mta.model.fav.Favorite;
 import com.mta.model.pojo.Child;
 
@@ -43,10 +43,10 @@ public class TesModel {
         f.setTitle("poi");
         f.setUrl("789");
 
-        Child child = ChildFavTypeConverter.toChild(f);
+        Child child = TypeConverters.toChild(f);
 
-        assertEquals(ChildFavTypeConverter.getId(child),
-                ChildFavTypeConverter.getId(f));
+        assertEquals(TypeConverters.getId(child),
+                TypeConverters.getId(f));
 
     }
 

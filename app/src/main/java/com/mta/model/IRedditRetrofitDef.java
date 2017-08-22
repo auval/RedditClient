@@ -8,10 +8,12 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
+ * retrofit definitions for code generation
+ *
  * Created by amir on 8/21/17.
  */
 
-public interface RedditList {
+public interface IRedditRetrofitDef {
     @GET("new.json")
     Call<RedditPojo> getNew();
 

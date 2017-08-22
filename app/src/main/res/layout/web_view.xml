@@ -27,33 +27,30 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/home_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:elevation="2dp"
-
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:elevation="2dp"
             android:tint="@android:color/holo_blue_light"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="?android:attr/homeAsUpIndicator"
+            android:src="?android:attr/homeAsUpIndicator"
             tools:layout_editor_absoluteX="9dp"
             tools:layout_editor_absoluteY="9dp" />
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="2dp"
-
+            android:id="@+id/star_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:elevation="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/btn_star_big_off"
-            tools:layout_editor_absoluteX="335dp"
-            tools:layout_editor_absoluteY="16dp" />
+            android:src="@drawable/ic_star_border_24dp" />
+        <!--app:srcCompat="@android:drawable/btn_star_big_off"-->
 
         <WebView
             android:id="@+id/webView"

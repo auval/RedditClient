@@ -11,7 +11,7 @@ import com.mta.model.pojo.Child;
 
 public interface IListView {
     // from presenter to the view
-    void openWebView(String url, String id);
+    void openWebView(Child c);//String url, String id);
 
     // from presenter to the view
     void showErrorMessage(int res);

@@ -31,4 +31,14 @@ public interface IListPresenter {
      void setFavorite(Child c, boolean fav);
 
      boolean isFavorite(Child child);
+
+     void showLiveChannel();
+
+     void showFavorites();
+
+     /**
+      *
+      * @return true if current tab is the online reddit tab
+      */
+     boolean isInLiveTab();
 }

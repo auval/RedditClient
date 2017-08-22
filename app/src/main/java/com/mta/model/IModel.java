@@ -1,8 +1,8 @@
 package com.mta.model;
 
-import com.mta.model.fav.MyDb;
 import com.mta.model.pojo.Child;
 import com.mta.redditclient.IListPresenter;
+//import com.mta.redditclient.ListPresenter;
 
 import java.util.List;
 
@@ -25,5 +25,28 @@ public interface IModel {
 
      List<Child> getPosts();
 
-    MyDb getFavDb();
+//    MyDb getFavDb();
+
+    List<Child> getFavorites();
+
+    void saveFavorite(Child c);
+
+    void deleteFavorite(Child c);
+
+    void loadCache();
+
+    boolean isFavCacheLoaded();
+
+    /**
+     * callback relevant only while cache is not loaded
+     *
+     * @param id
+     * @param callback
+     * @return
+     */
+    boolean isFavofite(String id, IListPresenter callback);
+
+    Child getChild(String id);
+
+    void cacheChildForWebView(Child c);
 }

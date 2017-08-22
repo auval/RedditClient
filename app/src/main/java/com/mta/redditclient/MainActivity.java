@@ -14,13 +14,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mta.model.IModel;
-import com.mta.model.RetrofitClient;
+import com.mta.model.RedditModel;
+import com.mta.model.fav.TypeConverters;
 import com.mta.model.pojo.Child;
 import com.mta.redditclient.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements IListView {
 
     private static final String REDDIT_CHANNEL = "top";
+//    private static final String REDDIT_CHANNEL = "new";
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int FETCH_LIMIT = 25;
@@ -37,9 +39,12 @@ public class MainActivity extends AppCompatActivity implements IListView {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     binding.message.setText(REDDIT_CHANNEL);
+                    mPresenter.showLiveChannel();
                     return true;
                 case R.id.navigation_fav:
                     binding.message.setText(R.string.title_favirotes);
+                    // replace the adapter with favorites
+                    mPresenter.showFavorites();
                     return true;
             }
             return false;
@@ -72,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements IListView {
     }
 
     private void initMVP() {
-        mModel = new RetrofitClient(getApplicationContext()); // M
+        mModel = new RedditModel(getApplicationContext()); // M
         mAdapter = new MyAdapter(mModel, this); // (+ this activity) V
         mPresenter = new ListPresenter(this, mModel, mAdapter); // P
     }
@@ -113,10 +118,13 @@ public class MainActivity extends AppCompatActivity implements IListView {
     }
 
     @Override
-    public void openWebView(String url, String id) {
+    public void openWebView(Child c) { //String url, String id) {
         Intent i = new Intent(this, WebViewActivity.class);
-        i.putExtra("url", url);
-        i.putExtra("id", id);
+
+        i.putExtra("url", c.getData().getUrl());
+        i.putExtra("id", TypeConverters.getId(c));
+        mModel.cacheChildForWebView(c);
+
         startActivity(i);
     }
 
@@ -131,10 +139,10 @@ public class MainActivity extends AppCompatActivity implements IListView {
         @Override
         public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
             Log.i(TAG, "load more: p" + page + " tot=" + totalItemsCount);
-
-            // todo: pipe this call via the Presenter, so the functionality could be unit tested:
-            mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, totalItemsCount, FETCH_LIMIT);
-
+            if (mPresenter.isInLiveTab()) {
+                // todo: pipe this call via the Presenter, so the functionality could be unit tested:
+                mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, totalItemsCount, FETCH_LIMIT);
+            }
         }
     }
 }

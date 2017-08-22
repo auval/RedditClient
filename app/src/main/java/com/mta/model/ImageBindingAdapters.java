@@ -7,6 +7,8 @@ import com.mta.redditclient.R;
 import com.squareup.picasso.Picasso;
 
 /**
+ * data binding converters
+ *
  * inspired by:
  * https://android.jlelse.eu/loading-images-with-data-binding-and-picasso-555dad683fdc
  *

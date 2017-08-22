@@ -1,7 +1,5 @@
 package com.mta.model.fav;
 
-import android.arch.persistence.room.TypeConverter;
-
 import com.mta.model.pojo.Child;
 import com.mta.model.pojo.Data_;
 
@@ -12,7 +10,7 @@ import com.mta.model.pojo.Data_;
  * Created by amir on 8/22/17.
  */
 
-public class ChildFavTypeConverter {
+public class TypeConverters {
 
 
     public static Child toChild(Favorite fav) {
@@ -24,15 +22,17 @@ public class ChildFavTypeConverter {
         c.setKind(split[0]);
         d.setId(split[1]);
         d.setUrl(fav.getUrl());
+        d.setTitle(fav.getTitle());
         d.setThumbnail(fav.getThumbnailImgUrl());
 
         return c;
     }
 
-    @TypeConverter
+    // @TypeConverter
     public static Favorite toFavorite(Child c) {
         Favorite f = new Favorite();
 
+        f.setTitle(c.getData().getTitle());
         f.setId(getId(c));
         f.setUrl(c.getData().getUrl());
         f.setThumbnailImgUrl(c.getData().getThumbnail());
@@ -42,6 +42,7 @@ public class ChildFavTypeConverter {
 
     /**
      * must return the same id as getId(fav) of the same instance
+     *
      * @param c
      * @return
      */
@@ -51,6 +52,7 @@ public class ChildFavTypeConverter {
 
     /**
      * must return the same id as getId(child) of the same instance
+     *
      * @param c
      * @return
      */
