@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements IListView {
     private static final String REDDIT_CHANNEL = "top";
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int FETCH_LIMIT = 25;
+
     // the mModel can be mocked for testing purpose
     static IModel mModel = new RetrofitClient();
     ActivityMainBinding binding;
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements IListView {
         binding.recyclerView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
         binding.recyclerView.addOnScrollListener(new EndlessScroll(linearLayoutManager));
         //setOnScrollChangeListener(new EndlessScroll());
+
+        mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, FETCH_LIMIT);
+
     }
 
     /**
@@ -74,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements IListView {
      * @param view
      */
     public void onLoadClicked(View view) {
-        mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, 25);
+        mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, FETCH_LIMIT);
     }
 
     @Override
@@ -100,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements IListView {
         startActivity(i);
     }
 
-    // inspired by https://stackoverflow.com/a/33454785/1180898
+    // used this:
     // https://github.com/codepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews-and-RecyclerView
     class EndlessScroll extends EndlessRecyclerViewScrollListener {
 
@@ -111,8 +116,9 @@ public class MainActivity extends AppCompatActivity implements IListView {
         @Override
         public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
             Log.i(TAG, "load more: p" + page + " tot=" + totalItemsCount);
-//mPresenter.
-            mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, totalItemsCount, 25);
+
+            // todo: pipe this call via the Presenter, so the functionality could be unit tested:
+            mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, totalItemsCount, FETCH_LIMIT);
 
         }
     }
