@@ -11,10 +11,9 @@ import java.util.List;
 
 class ListPresenter implements IListPresenter {
 
-
-    private IListView view;
+    private IListView view; // has ref to context
     private IModel model;
-    private IListAdapter mAdapter;
+    private IListAdapter mAdapter; // has ref to context
 
     public ListPresenter(IListView view, IModel model, IListAdapter adapter) {
         this.view = view;
@@ -36,6 +35,18 @@ class ListPresenter implements IListPresenter {
     public void onFetchFailure() {
         view.showErrorMessage(R.string.failed_fetch);
     }
+
+    @Override
+    public void openUrl(Child c) {
+        view.openWebView(c.getData().getUrl(), c.getData().getId());
+    }
+
+//    @Override
+//    public void openUrl(Child c) {
+//
+////    public void onRowClicked(int i) {
+//// doesn't fit with the natural listener flow
+//    }
 
 
 }

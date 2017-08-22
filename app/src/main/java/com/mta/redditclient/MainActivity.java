@@ -1,5 +1,6 @@
 package com.mta.redditclient;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.mta.model.IModel;
 import com.mta.model.RetrofitClient;
+import com.mta.model.pojo.Child;
 import com.mta.redditclient.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements IListView {
@@ -19,11 +21,10 @@ public class MainActivity extends AppCompatActivity implements IListView {
     private static final String REDDIT_CHANNEL = "top";
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    ActivityMainBinding binding;
-
     // the mModel can be mocked for testing purpose
     static IModel mModel = new RetrofitClient();
-    MyAdapter mAdapter = new MyAdapter(mModel);
+    ActivityMainBinding binding;
+    MyAdapter mAdapter = new MyAdapter(mModel, this);
     IListPresenter mPresenter = new ListPresenter(this, mModel, mAdapter);
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -78,6 +79,19 @@ public class MainActivity extends AppCompatActivity implements IListView {
     @Override
     public void invalidateList(IModel model) {
         binding.recyclerView.getAdapter().notifyDataSetChanged();
-                //invalidate();
+        //invalidate();
+    }
+
+    @Override
+    public void onUserClicked(Child child) {
+        mPresenter.openUrl(child);
+    }
+
+    @Override
+    public void openWebView(String url, String id) {
+        Intent i = new Intent(this, WebViewActivity.class);
+        i.putExtra("url", url);
+        i.putExtra("id", id);
+        startActivity(i);
     }
 }

@@ -17,7 +17,8 @@ import com.squareup.picasso.Picasso;
 
 public class AsyncImage {
 
-    @BindingAdapter({"app:srcCompat"})
+//    @BindingAdapter({"app:srcCompat"})
+    @BindingAdapter({"srcCompat"})
     public static void loadImage(ImageView view, String imageUrl) {
         Picasso.with(view.getContext())
                 .load(imageUrl)

@@ -5,6 +5,10 @@
         <variable
             name="child"
             type="com.mta.model.pojo.Child" />
+        <variable
+            name="handler"
+            type="com.mta.redditclient.PostRow"/>
+
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -15,6 +19,9 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="4dp">
+
+        <!--todo: try to bind something like this: -->
+        <!--android:onClick="@{(view) -> handler.onClicked(child)}"-->
 
         <ImageView
             android:id="@+id/fav_star"
