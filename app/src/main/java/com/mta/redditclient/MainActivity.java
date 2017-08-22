@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -54,9 +56,15 @@ public class MainActivity extends AppCompatActivity implements IListView {
         // requirement 1A
         binding.navigation.getMenu().getItem(0).setTitle(REDDIT_CHANNEL);
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
 
         binding.recyclerView.setAdapter(mAdapter);
+
+        // requirement 2
+        binding.recyclerView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
+        binding.recyclerView.addOnScrollListener(new EndlessScroll(linearLayoutManager));
+        //setOnScrollChangeListener(new EndlessScroll());
     }
 
     /**
@@ -67,8 +75,6 @@ public class MainActivity extends AppCompatActivity implements IListView {
      */
     public void onLoadClicked(View view) {
         mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, 25);
-
-
     }
 
     @Override
@@ -79,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements IListView {
     @Override
     public void invalidateList(IModel model) {
         binding.recyclerView.getAdapter().notifyDataSetChanged();
-        //invalidate();
     }
 
     @Override
@@ -93,5 +98,22 @@ public class MainActivity extends AppCompatActivity implements IListView {
         i.putExtra("url", url);
         i.putExtra("id", id);
         startActivity(i);
+    }
+
+    // inspired by https://stackoverflow.com/a/33454785/1180898
+    // https://github.com/codepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews-and-RecyclerView
+    class EndlessScroll extends EndlessRecyclerViewScrollListener {
+
+        public EndlessScroll(LinearLayoutManager layoutManager) {
+            super(layoutManager);
+        }
+
+        @Override
+        public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+            Log.i(TAG, "load more: p" + page + " tot=" + totalItemsCount);
+//mPresenter.
+            mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, totalItemsCount, 25);
+
+        }
     }
 }

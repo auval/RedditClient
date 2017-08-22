@@ -19,4 +19,21 @@ public interface RedditList {
     Call<RedditPojo> getChannel(
             @Path("channel") String channel,
             @Query("limit") int limit);
+
+    /**
+     * -au/
+     * This method is for pagination.
+     * One note though- while scrolling down there may be a new post coming.
+     * Reading the newest post is not in the scope of the test.
+     *
+     * @param channel
+     * @param limit
+     * @param after formatted like: "t3_6v9q96", which is the child's type_id
+     * @return
+     */
+    @GET("{channel}.json")
+    Call<RedditPojo> getChannel(
+            @Path("channel") String channel,
+            @Query("limit") int limit,
+            @Query("after") String after);
 }

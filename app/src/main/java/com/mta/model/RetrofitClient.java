@@ -51,7 +51,14 @@ public class RetrofitClient implements IModel {
 
         RedditList reddit = client.create(RedditList.class);
 
-        Call<RedditPojo> data = reddit.getChannel(channel, 10);
+        Call<RedditPojo> data;
+        if (startIndex == 0) {
+            data = reddit.getChannel(channel, limit);
+        } else {
+            Child child = mPostsList.get(mPostsList.size() - 1);
+            String after = child.getKind() + "_" + child.getData().getId();
+            data = reddit.getChannel(channel, limit, after);
+        }
 
         // async call, so we can call it on the main thread
         data.enqueue(new Callback<RedditPojo>() {
@@ -62,7 +69,7 @@ public class RetrofitClient implements IModel {
                 Data data = body.getData();
 
                 List<Child> children = data.getChildren();
-                if (startIndex==0) {
+                if (startIndex == 0) {
                     // we're probably not paginating, so remove the old data
                     mPostsList.clear();
                 }
