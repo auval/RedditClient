@@ -27,5 +27,8 @@ public interface IListPresenter {
       */
      void openUrl(Child c);
 
-//     RecyclerView.Adapter getListAdapter();
+
+     void setFavorite(Child c, boolean fav);
+
+     boolean isFavorite(Child child);
 }

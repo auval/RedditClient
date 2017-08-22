@@ -1,7 +1,9 @@
 package com.mta.model;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.mta.model.fav.MyDb;
 import com.mta.model.pojo.Child;
 import com.mta.model.pojo.Data;
 import com.mta.model.pojo.RedditPojo;
@@ -26,10 +28,23 @@ public class RetrofitClient implements IModel {
 
     private static final String TAG = RetrofitClient.class.getSimpleName();
     private static final String REDDIT_BASE_URL = "https://www.reddit.com/r/all/";
-    private static Retrofit retrofit = null;
 
     // a mutable list to hold the most recent response from the server
-    List<Child> mPostsList = new ArrayList<>();
+    // it's static so it will survive configuration change, and prevent extra network calls
+    static List<Child> mPostsList = new ArrayList<>();
+
+    private static Retrofit retrofit = null;
+    private Context appContext;
+
+    /**
+     * appContext is stored, so no memory leak here even by accident
+     *
+     * @param context
+     */
+    public RetrofitClient(Context context) {
+        this.appContext = context.getApplicationContext();
+    }
+
 
     public static Retrofit getClient(String baseUrl) {
         if (retrofit == null) {
@@ -96,6 +111,11 @@ public class RetrofitClient implements IModel {
     @Override
     public List<Child> getPosts() {
         return mPostsList;
+    }
+
+    @Override
+    public MyDb getFavDb() {
+        return MyDb.getInstance(appContext);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.mta.model;
 
+import com.mta.model.fav.MyDb;
 import com.mta.model.pojo.Child;
 import com.mta.redditclient.IListPresenter;
 
@@ -24,4 +25,5 @@ public interface IModel {
 
      List<Child> getPosts();
 
+    MyDb getFavDb();
 }

@@ -15,9 +15,13 @@ import com.squareup.picasso.Picasso;
  * Created by amir on 8/21/17.
  */
 
-public class AsyncImage {
+public class ImageBindingAdapters {
 
-//    @BindingAdapter({"app:srcCompat"})
+    /**
+     * used for the thumbnail
+     * @param view
+     * @param imageUrl
+     */
     @BindingAdapter({"srcCompat"})
     public static void loadImage(ImageView view, String imageUrl) {
         Picasso.with(view.getContext())
@@ -25,4 +29,17 @@ public class AsyncImage {
                 .placeholder(R.drawable.ic_iconmonstr_reddit_4)
                 .into(view);
     }
+
+    /**
+     * used for the favorite icon
+     * @param view
+     * @param res
+     */
+    @BindingAdapter({"srcCompat"})
+    public static void loadImage(ImageView view, int res) {
+        view.setImageResource(res);
+    }
+
+
+
 }

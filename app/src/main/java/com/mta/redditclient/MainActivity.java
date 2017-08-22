@@ -24,13 +24,10 @@ public class MainActivity extends AppCompatActivity implements IListView {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int FETCH_LIMIT = 25;
-
-    // the mModel can be mocked for testing purpose
-    static IModel mModel = new RetrofitClient();
     ActivityMainBinding binding;
-    MyAdapter mAdapter = new MyAdapter(mModel, this);
-    IListPresenter mPresenter = new ListPresenter(this, mModel, mAdapter);
-
+    IModel mModel;
+    MyAdapter mAdapter;
+    IListPresenter mPresenter;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -52,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements IListView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initMVP();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -68,8 +66,15 @@ public class MainActivity extends AppCompatActivity implements IListView {
         binding.recyclerView.addOnScrollListener(new EndlessScroll(linearLayoutManager));
         //setOnScrollChangeListener(new EndlessScroll());
 
-        mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, FETCH_LIMIT);
+        if (mModel.getPosts().isEmpty()) {
+            mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, FETCH_LIMIT);
+        }
+    }
 
+    private void initMVP() {
+        mModel = new RetrofitClient(getApplicationContext()); // M
+        mAdapter = new MyAdapter(mModel, this); // (+ this activity) V
+        mPresenter = new ListPresenter(this, mModel, mAdapter); // P
     }
 
     /**
@@ -98,6 +103,16 @@ public class MainActivity extends AppCompatActivity implements IListView {
     }
 
     @Override
+    public void userToggledFav(Child child) {
+        mPresenter.setFavorite(child, !mPresenter.isFavorite(child));
+    }
+
+    @Override
+    public boolean isFavorite(Child child) {
+        return mPresenter.isFavorite(child);
+    }
+
+    @Override
     public void openWebView(String url, String id) {
         Intent i = new Intent(this, WebViewActivity.class);
         i.putExtra("url", url);
@@ -105,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements IListView {
         startActivity(i);
     }
 
-    // used this:
+    // used code from here:
     // https://github.com/codepath/android_guides/wiki/Endless-Scrolling-with-AdapterViews-and-RecyclerView
     class EndlessScroll extends EndlessRecyclerViewScrollListener {
 

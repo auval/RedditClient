@@ -2,12 +2,17 @@
 <layout>
 
     <data>
+
         <variable
             name="child"
             type="com.mta.model.pojo.Child" />
+        <!--        <variable
+                    name="handler"
+                    type="com.mta.redditclient.PostRow"/>-->
+
         <variable
-            name="handler"
-            type="com.mta.redditclient.PostRow"/>
+            name="favicon"
+            type="int" />
 
     </data>
 
@@ -28,11 +33,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            app:srcCompat="@android:drawable/btn_star_big_off" />
+            app:srcCompat="@{favicon}" />
 
         <!-- binding w/ picasso inspired by: -->
         <!-- https://android.jlelse.eu/loading-images-with-data-binding-and-picasso-555dad683fdc -->
-        <!-- implemented in AsyncImage.java -->
+        <!-- implementedImageBindingAdaptersmage.java -->
         <ImageView
             android:id="@+id/thumbnail"
             android:layout_width="@dimen/post_image_size"

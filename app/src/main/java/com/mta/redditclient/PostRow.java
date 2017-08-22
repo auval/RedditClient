@@ -27,28 +27,47 @@ public class PostRow extends LinearLayout implements View.OnClickListener {
         LayoutInflater layoutInflater = (LayoutInflater) p.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//        binding = DataBindingUtil.inflate(layoutInflater, R.layout.row_layout, p, false);
-        binding = DataBindingUtil.inflate(layoutInflater, R.layout.row_layout, this, true);
+        binding = DataBindingUtil.inflate(layoutInflater,
+                R.layout.row_layout, this, true);
 
     }
 
     public void bind(Child child) {
-        Log.i(TAG, child.getData().getId() + ": " + child.getData().getTitle());
         binding.setChild(child);
 
         // todo: replace this with data binding
         setOnClickListener(this);
+
+        binding.favStar.setOnClickListener(this);
+
+        setupFavButton();
+
     }
 
-//    public void onClicked(View view) {
-//        Log.i(TAG,"got click on "+view);
-//    }
+    private void setupFavButton() {
+        // todo: can move this logic to an observable data class that uses both Child and Favorite
+        if (isFav()) {
+            binding.setFavicon(R.drawable.ic_star_24dp);
+        } else {
+            binding.setFavicon(R.drawable.ic_star_border_24dp);
+        }
+    }
 
     @Override
     public void onClick(View view) {
-        Log.i(TAG, "got click on " + binding.getChild().getData().getTitle());
-        listview.onUserClicked(binding.getChild());
-                //openWebView();
-                //openUrl(binding.getChild());
+        if (view == this) {
+            // the entire row was clicked, open a webview
+            listview.onUserClicked(binding.getChild());
+        } else if (view == binding.favStar) {
+            // toggle the fav on/off
+            Log.i(TAG, "fav clicked");
+
+            listview.userToggledFav(binding.getChild());
+            setupFavButton();
+        }
+    }
+
+    public boolean isFav() {
+        return listview.isFavorite(binding.getChild());
     }
 }

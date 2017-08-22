@@ -1,5 +1,7 @@
 package com.mta.redditclient;
 
+import android.content.Context;
+
 import com.mta.model.IModel;
 import com.mta.model.pojo.Child;
 
@@ -19,4 +21,9 @@ public interface IListView {
 
     // inbound, from view to the presenter
     void onUserClicked(Child child);
+
+
+    void userToggledFav(Child child);
+
+    boolean isFavorite(Child child);
 }
