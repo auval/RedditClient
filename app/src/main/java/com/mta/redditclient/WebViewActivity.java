@@ -16,7 +16,6 @@ import com.mta.redditclient.databinding.WebViewBinding;
 /**
  * Created by amir on 8/21/17.
  */
-
 public class WebViewActivity extends Activity {
 
     WebViewBinding binding;
@@ -29,7 +28,6 @@ public class WebViewActivity extends Activity {
         binding.contentLoadingProgressBar.show();
 
         String url = getIntent().getStringExtra("url");
-        String id = getIntent().getStringExtra("id");
 
         binding.webView.getSettings().setJavaScriptEnabled(true);
         binding.webView.loadUrl(url);
@@ -38,7 +36,11 @@ public class WebViewActivity extends Activity {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
 
+                // TODO: show error message to the user and return to the main list
+                // or ask if to try and open in in an external browser
+
             }
+
         });
         binding.webView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -56,5 +58,4 @@ public class WebViewActivity extends Activity {
 
 
     }
-
 }
