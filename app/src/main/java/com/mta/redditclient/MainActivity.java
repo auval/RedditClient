@@ -61,14 +61,12 @@ public class MainActivity extends AppCompatActivity implements IListView, Search
         binding.navigation.getMenu().getItem(0).setTitle(REDDIT_CHANNEL);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         binding.recyclerView.setLayoutManager(linearLayoutManager);
-
         binding.recyclerView.setAdapter(mAdapter);
 
         // requirement 2
-        binding.recyclerView.setOverScrollMode(View.OVER_SCROLL_ALWAYS);
         binding.recyclerView.addOnScrollListener(new EndlessScroll(linearLayoutManager));
-        //setOnScrollChangeListener(new EndlessScroll());
 
         if (mModel.getPosts().isEmpty()) {
             mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, FETCH_LIMIT);
@@ -81,6 +79,16 @@ public class MainActivity extends AppCompatActivity implements IListView, Search
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // refresh the list when coming back from web view
+        binding.recyclerView.getAdapter().notifyDataSetChanged();
+    }
+
+    /**
+     * "injecting" dependencies manually, instead of using Dagger
+     */
     private void initMVP() {
         mModel = new RedditModel(getApplicationContext()); // M
         mAdapter = new MyAdapter(mModel, this); // (+ this activity) V
@@ -95,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements IListView, Search
     @Override
     public void invalidateList(IModel model) {
         binding.recyclerView.getAdapter().notifyDataSetChanged();
+        binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -146,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements IListView, Search
         public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
             Log.i(TAG, "load more: p" + page + " tot=" + totalItemsCount);
             if (mPresenter.isInLiveTab()) {
+                binding.progressBar.setVisibility(View.VISIBLE);
                 // todo: pipe this call via the Presenter, so the functionality could be unit tested:
                 mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, totalItemsCount, FETCH_LIMIT);
             }
