@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.mta.model.IModel;
@@ -19,10 +20,9 @@ import com.mta.model.fav.TypeConverters;
 import com.mta.model.pojo.Child;
 import com.mta.redditclient.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements IListView {
+public class MainActivity extends AppCompatActivity implements IListView, SearchView.OnQueryTextListener {
 
     private static final String REDDIT_CHANNEL = "top";
-//    private static final String REDDIT_CHANNEL = "new";
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int FETCH_LIMIT = 25;
@@ -36,13 +36,12 @@ public class MainActivity extends AppCompatActivity implements IListView {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    binding.message.setText(REDDIT_CHANNEL);
                     mPresenter.showLiveChannel();
                     return true;
                 case R.id.navigation_fav:
-                    binding.message.setText(R.string.title_favirotes);
                     // replace the adapter with favorites
                     mPresenter.showFavorites();
                     return true;
@@ -74,22 +73,18 @@ public class MainActivity extends AppCompatActivity implements IListView {
         if (mModel.getPosts().isEmpty()) {
             mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, FETCH_LIMIT);
         }
+
+        // requirement 4
+        // looked at reference: https://stackoverflow.com/a/30429439/1180898
+        // but my solution is simpler
+        binding.searchView.setOnQueryTextListener(this);
+
     }
 
     private void initMVP() {
         mModel = new RedditModel(getApplicationContext()); // M
         mAdapter = new MyAdapter(mModel, this); // (+ this activity) V
         mPresenter = new ListPresenter(this, mModel, mAdapter); // P
-    }
-
-    /**
-     * temporary method to work on the retrofit part only.
-     * Called when the title is clicked
-     *
-     * @param view
-     */
-    public void onLoadClicked(View view) {
-        mModel.fetchPostsList(REDDIT_CHANNEL, mPresenter, 0, FETCH_LIMIT);
     }
 
     @Override
@@ -126,6 +121,17 @@ public class MainActivity extends AppCompatActivity implements IListView {
         mModel.cacheChildForWebView(c);
 
         startActivity(i);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        mAdapter.filterOn(s);
+        return true;
     }
 
     // used code from here:

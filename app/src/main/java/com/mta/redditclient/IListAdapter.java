@@ -11,4 +11,6 @@ import java.util.List;
 interface IListAdapter {
     void setData(List<Child> data);
     Child getData(int row) ;
+
+    void filterOn(String s);
 }

@@ -2,6 +2,8 @@ package com.mta.redditclient;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.text.Spannable;
+import android.text.style.BackgroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,6 +42,17 @@ public class PostRow extends LinearLayout implements View.OnClickListener {
 
         binding.favStar.setOnClickListener(this);
 
+        if (child.getMatchAt() >= 0) {
+            // https://stackoverflow.com/a/2120190/1180898
+            Spannable highlighted = Spannable.Factory.getInstance().newSpannable(child.getData().getTitle());
+            highlighted.setSpan(new BackgroundColorSpan(0xFFFFFF00),
+                    child.getMatchAt(), child.getMatchAt() + child.getLength(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            binding.title.setText(highlighted);
+        } else {
+            binding.title.setText(child.getData().getTitle());
+        }
         setupFavButton();
 
     }

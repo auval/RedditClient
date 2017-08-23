@@ -19,8 +19,10 @@ Created by Amir Uval as a home test for Wix..
 
 #### NTH
 
+- *(done)* favorite toggleable star on every row
 - fancy wait animation
 - replace manual onClickListener with the databinding way
+- when filtering rows, highlight the text matching the filter
 
 #### debug db reference:
 
