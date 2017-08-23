@@ -20,22 +20,9 @@ Created by Amir Uval as a home test for Wix..
 #### NTH
 
 - *(done)* favorite toggleable star on every row
+- *(done)* when filtering rows, highlight the text matching the filter
 - fancy wait animation
 - replace manual onClickListener with the databinding way
-- when filtering rows, highlight the text matching the filter
-
-#### debug db reference:
-
-- adb shell
-- run-as com.mta.redditclient
-- cd databases/
-- sqlite3 fav.db
-- .headers on
-- .mode column
-- .width 20 20 20 20 20 20 20 20 20 20 20 
-- .tables 
-- select * from Favorite;
-
 
 
 #### Notes on the architecture chosen
@@ -57,4 +44,18 @@ picasso: for the thumbnails
 Room: used to store favorites in db
 databinding: used for all layouts to better UI performance and less code
 mocitto: for unit testing
+
+
+#### debug db reference 
+(just for my copy&paste convenience):
+<pre>
+ adb shell
+ run-as com.mta.redditclient
+ sqlite3 databases/fav.db
+ .headers on
+ .mode column
+ .width 20 20 20 20 20 20 20 20 20 20 20 
+ .tables 
+ select * from Favorite;
+</pre>
 
