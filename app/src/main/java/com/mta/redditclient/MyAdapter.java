@@ -75,15 +75,29 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
     @Override
     public void filterOn(String s) {
-        currentFilter = s;
-        data.clear();
-        String slc = s.toLowerCase();
-        for (Child c : dataCopy) {
-            if (match(c, slc) >= 0) {
-                data.add(c);
+        // the requirements limit the filter to length of 3 or more
+        if (s.length() < 3) {
+            if (currentFilter != null) {
+                // it means we have an active filter, we need to clear it
+                data.clear();
+                for (Child c : dataCopy) {
+                    c.setMatchAt(-1, 0);
+                    data.add(c);
+                }
+                currentFilter = null;
+                notifyDataSetChanged();
             }
+        } else {
+            currentFilter = s;
+            data.clear();
+            String slc = s.toLowerCase();
+            for (Child c : dataCopy) {
+                if (match(c, slc) >= 0) {
+                    data.add(c);
+                }
+            }
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
 
     }
 
