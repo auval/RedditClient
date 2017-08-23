@@ -2,6 +2,7 @@ package com.mta.redditclient;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.mta.model.IModel;
 import com.mta.model.pojo.Child;
@@ -48,13 +49,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bind(data.get(position));
+        holder.bindData(data.get(position));
     }
 
 
     @Override
     public int getItemCount() {
-        return /*data == null ? 0 :*/ data.size();
+        return data.size();
     }
 
     @Override
@@ -127,7 +128,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> impl
             mView = item;
         }
 
-        void bind(Child child) {
+        void bindData(Child child) {
             mView.bind(child);
         }
     }

@@ -1,6 +1,5 @@
 package com.mta.redditclient;
 
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.text.Spannable;
 import android.text.style.BackgroundColorSpan;
@@ -26,10 +25,8 @@ public class PostRow extends LinearLayout implements View.OnClickListener {
     public PostRow(ViewGroup p, IListView listview) {
         super(p.getContext());
         this.listview = listview;
-        LayoutInflater layoutInflater = (LayoutInflater) p.getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        binding = DataBindingUtil.inflate(layoutInflater,
+        binding = DataBindingUtil.inflate(LayoutInflater.from(p.getContext()),
                 R.layout.row_layout, this, true);
 
     }
