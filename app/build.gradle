@@ -1,3 +1,4 @@
+//noinspection GradleCompatible
 apply plugin: 'com.android.application'
 
 android {
@@ -54,6 +55,9 @@ dependencies {
     // room (https://developer.android.com/topic/libraries/architecture/room.html)
     compile "android.arch.persistence.room:runtime:1.0.0-alpha9"
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha9"
+
+    // card view
+    compile 'com.android.support:cardview-v7:26.0.1'
 
 
     testCompile "org.mockito:mockito-core:2.8.9"
