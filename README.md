@@ -36,3 +36,23 @@ Created by Amir Uval as a home test for Wix..
 
 
 
+#### Notes on the architecture chosen
+
+I've used a mixture of MVP and MVVM patterns for code separation, to allow Unit testing of the Presenter mostly.
+
+I've also used my own class to allow serialize async and ui thread operations.
+But I think that RxJava would work better for that. 
+I didn't need RxJava for my past projects, and it's not a good idea to work on RxJava for the first time on a time constrained test project.
+
+I didn't use DI framework library in this project (Dagger2), 
+but I did use DI architecture, implemented manually by creating dependencies in the Activity and passing them to consumers.
+
+
+#### Notes on libraries used
+
+Retrofit: for fetching data from the server
+picasso: for the thumbnails
+Room: used to store favorites in db
+databinding: used for all layouts to better UI performance and less code
+mocitto: for unit testing
+

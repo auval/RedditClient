@@ -81,11 +81,10 @@ public class TestListPresenter {
         when(mockAdapter.getData(0)).thenReturn(c);
 
         // row click should get the url for the row clicked
-//        actualPresenter.onRowClicked(0);
         actualPresenter.openUrl(c);
 
-        // and start the webview activity with this url
-        verify(mockView).openWebView("test", "no id");
+        // and start the web view activity with this url
+        verify(mockView).openWebView(c);
     }
 
 }

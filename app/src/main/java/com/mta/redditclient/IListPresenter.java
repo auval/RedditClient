@@ -28,17 +28,35 @@ public interface IListPresenter {
      void openUrl(Child c);
 
 
+     /**
+      * sets Child's favorite state (on/off)
+      *
+      * @param c
+      * @param fav
+      */
      void setFavorite(Child c, boolean fav);
 
+     /**
+      * checks if a given Child is marked as favorite
+      *
+      * @param child
+      * @return
+      */
      boolean isFavorite(Child child);
 
+     /**
+      * switch tab
+      */
      void showLiveChannel();
 
+     /**
+      * switch tab
+      */
      void showFavorites();
 
      /**
       *
-      * @return true if current tab is the online reddit tab
+      * @return true if current tab is the live reddit tab
       */
      boolean isInLiveTab();
 }

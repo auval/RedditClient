@@ -73,6 +73,8 @@ public class WebViewActivity extends Activity implements View.OnClickListener {
     }
 
     private void initModel() {
+        // I create a new instance, but the raw data it stored in static fields,
+        // so I'll have access here to the same data.
         mModel = new RedditModel(this);
         favofite = mModel.isFavofite(id, null);
 

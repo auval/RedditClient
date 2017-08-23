@@ -35,9 +35,11 @@ public class RedditModel implements IModel {
     // a mutable list to cache the most recent response from the server
     // it's static so it will survive configuration change, and prevent extra network calls
     // a Child is a plain Pojo, so no danger for memory leak
-    static List<Child> sPostsList = new ArrayList<>();
+    private static List<Child> sPostsList = new ArrayList<>();
 
-    static Child sCurrentlyWebViewd = null;
+    // private static doesn't harm testability, since access is via methods in the interface,
+    // and they can be mocked.
+    private static Child sCurrentlyWebViewd = null;
 
     private static Retrofit retrofit = null;
     private Context appContext;
@@ -99,10 +101,6 @@ public class RedditModel implements IModel {
                     // we're probably not paginating, so remove the old data
                     sPostsList.clear();
                 }
-//                for (Child c : children) {
-//                    Log.i(TAG, "child:" + c);
-//                    sPostsList.add(c);
-//                }
 
                 sPostsList.addAll(children);
 
@@ -151,22 +149,16 @@ public class RedditModel implements IModel {
 
     @Override
     public boolean isFavofite(String id, IListPresenter callback) {
-//        if (isFavCacheLoaded()) {
         return MyDb.getInstance(appContext).isFavorite(id, callback);
-//        } else {
-//            loadCache();
-//
-//            // for now return false, wait until the fav list is ready, and a callback will be sent
-//            return false;
-//        }
     }
 
     @Override
     public Child getChild(String id) {
-        if (sCurrentlyWebViewd != null && TypeConverters.getId(sCurrentlyWebViewd) .equals( id)) {
+        if (sCurrentlyWebViewd != null && TypeConverters.getId(sCurrentlyWebViewd).equals(id)) {
             return sCurrentlyWebViewd;
         }
         // we're not supposed to reach here.
+        // If it does happen:
         // I can search for the child inside the cached list (but it'll be inefficient)
         // It could also be cached as Favorite
         return null;
