@@ -53,6 +53,12 @@ public class MainActivity extends AppCompatActivity implements IListView, Search
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            // This process is dedicated to LeakCanary for heap analysis.
+//            // You should not init your app in this process.
+//            return;
+//        }
+//        LeakCanary.install(getApplication());
         initMVP();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
