@@ -1,7 +1,7 @@
 Reddit Client
 -
 
-Created by Amir Uval as a home test for Wix..
+Created by Amir Uval as an exercise.
 
 
 #### Missing features
